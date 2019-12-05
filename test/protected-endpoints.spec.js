@@ -28,7 +28,7 @@ describe.only('Things Endpoints', function() {
   const protectedEndpoints = [
       {
         name: 'GET /api/things/thing_id',
-        path: '/api/things/thing_id',
+        path: '/api/things/:thing_id',
         method: supertest(app).get,   
       },
     {
@@ -52,7 +52,7 @@ describe.only('Things Endpoints', function() {
 
         it.only(`responds 401 'Unauthorized request' when no credentials in token`, () => {
             const userNoCreds = {user_name:'', password:''};
-            return endpoint.method(endpoing.path)
+            return endpoint.method(endpoint.path)
             .set('Authorization', helpers.makeAuthHeader(userNoCreds))
             .expect(401, {error: { message: 'Unauthorized request'}})
         });

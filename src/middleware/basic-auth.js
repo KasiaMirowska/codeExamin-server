@@ -1,12 +1,13 @@
 const AuthService = require('../auth/auth-service');
+const bcrypt = require('bcryptjs');
+
 
 function requireAuth(req, res, next) {
     const authToken = req.get('Authorization') || '';
 
     console.log(authToken)
-
     console.log(AuthService.parseBasicToken(authToken), '2222222222222222')
-    console.log(Buffer.from(authToken, 'base64').toString())
+    console.log(Buffer.from(authToken, 'base64').toString(), '##3333333333333333333')
 
 
     let basicToken;
@@ -22,7 +23,7 @@ function requireAuth(req, res, next) {
     const [tokenUserName, tokenPassword] = AuthService.parseBasicToken(basicToken)
 
     if (!tokenUserName || !tokenPassword) {
-        return res.status(401).json({ error: 'Unauthorized request' })
+        return res.status(401).json({ error: {message:'Unauthorized request' }})
     }
 
     AuthService.getUserWithUserName(
@@ -30,11 +31,17 @@ function requireAuth(req, res, next) {
         tokenUserName
     )
         .then(user => {
-            if (!user || user.password !== tokenPassword) {
-                return res.status(401).json({ error: 'Unauthorized request' })
+            if (!user) {
+                return res.status(401).json({ error: {message:'Unauthorized request' }})
             }
-            req.user = user;
-            next()
+            return bcrypt.compare(tokenPassword, user.password)
+                .then(passwordsMatch => {
+                    if (!passwordsMatch) {
+                        return res.status(401).json({ error: { message: 'Unauthorized request' } })
+                    }
+                    req.user = user;
+                    next()
+                })
         })
         .catch(next)
 }
