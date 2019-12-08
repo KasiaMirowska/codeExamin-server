@@ -45,23 +45,24 @@ describe.only('Things Endpoints', function() {
   ]
   protectedEndpoints.forEach(endpoint => {
       describe(endpoint.name, () => {
-        it(`responds 401 'Missing basic token' when no token `,() => {
+        it(`responds 401 'Missing basic token' when no basic token `,() => {
             return endpoint.method(endpoint.path)
             .expect(401, {error: {message: 'Missing basic token'}})
         });
 
-        it.only(`responds 401 'Unauthorized request' when no credentials in token`, () => {
-            const userNoCreds = {user_name:'', password:''};
+        it(`responds 401 'Unauthorized request' when no credentials in token`, () => {
+            const validUser = testUsers[0];
+            const invalidSecret = 'bad-secret';
             return endpoint.method(endpoint.path)
-            .set('Authorization', helpers.makeAuthHeader(userNoCreds))
+            .set('Authorization', helpers.makeAuthHeader(validUser, invalidSecret))
             .expect(401, {error: { message: 'Unauthorized request'}})
         });
 
-        it(`responds with 401 'Unathorized request' when invalid credentials`, () => {
-            const wrongUser = {user_name: 'wrong', password: 'bla'};
+        it.only(`responds with 401 'Unathorized request' when invalid subject in payload`, () => {
+            const invalidUser = {user_name: 'wrong', id: 1};
             return endpoint.method(endpoint.path)
                 .set('Authorizaton',
-                helpers.makeAuthHeader(wrongUser))
+                helpers.makeAuthHeader(invalidUser))
                 .expect(401, {error: { message: 'Unauthorized request'}})
         });
 

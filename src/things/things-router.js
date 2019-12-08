@@ -1,13 +1,14 @@
 const express = require('express')
 const ThingsService = require('./things-service')
 const thingsRouter = express.Router()
-const { requireAuth } = require('../middleware/basic-auth')
+const { requireAuth } = require('../middleware/jwt-auth')
 
 thingsRouter
   .route('/')
   .get((req, res, next) => {
     ThingsService.getAllThings(req.app.get('db'))
       .then(things => {
+        console.log(things[0],'HERE???????????')
         res.json(ThingsService.serializeThings(things))
       })
       .catch(next)

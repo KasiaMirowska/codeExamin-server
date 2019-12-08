@@ -5,7 +5,7 @@ TRUNCATE
   thingful_things,
   thingful_users
   RESTART IDENTITY CASCADE;
-
+code
 INSERT INTO thingful_users (user_name, full_name, nickname, password)
 VALUES
   ('dunder', 'Dunder Mifflin', null, '$2a$16$gl/eHyggHZFBhyxudV25vuw4pRzOA2yt3sFrzpoYpMa3zwYqI.nPu'),
