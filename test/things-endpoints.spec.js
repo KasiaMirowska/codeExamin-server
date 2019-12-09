@@ -88,7 +88,7 @@ describe('Things Endpoints', function() {
   describe(`GET /api/things/:thing_id`, () => {
     context(`Given no things`, () => {
       beforeEach(() =>
-        helpers.seedUsers(db, testUsers) //how is this working if I'm not creating testUsers with helpers.seedThingsTables?
+        helpers.seedUsers(db, testUsers) 
       )
       it(`responds with 404`, () => {
         const thingId = 123456
