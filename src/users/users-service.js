@@ -14,7 +14,7 @@ const UsersService = {
     insertUser(db, newUser) {
         return db
             .insert(newUser)
-            .into('blogful_users')
+            .into('thingful_users')
             .returning('*')
             .then(([user]) => user)
     },

@@ -1,3 +1,5 @@
+const AuthService = require('../auth/auth-service');
+
 function requireAuth(req,res,next) {
     const authToken = req.get('Authorization') || '';
 
@@ -6,13 +8,14 @@ function requireAuth(req,res,next) {
         return res.status(401).json({error: {message: 'Mising bearer token'}})
     } else {
         bearerToken = authToken.slice(7, authToken.length)
+        
     }
     try {
         const payload = AuthService.verifyJwt(bearerToken)
-
+    
         AuthService.getUserWithUserName(
             req.app.get('db'),
-            payload.subject,
+            payload.sub,
         )
         .then(user => {
             if(!user) {

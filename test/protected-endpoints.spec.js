@@ -58,7 +58,7 @@ describe.only('Things Endpoints', function() {
             .expect(401, {error: { message: 'Unauthorized request'}})
         });
 
-        it.only(`responds with 401 'Unathorized request' when invalid subject in payload`, () => {
+        it(`responds with 401 'Unathorized request' when invalid subject in payload`, () => {
             const invalidUser = {user_name: 'wrong', id: 1};
             return endpoint.method(endpoint.path)
                 .set('Authorizaton',

@@ -2,7 +2,7 @@ const express = require('express')
 const usersRouter = express.Router()
 const jsonBodyParser = express.json()
 const path = require('path');
-
+const UsersService = require('./users-service');
 usersRouter
     .post('/api/users', jsonBodyParser, (req, res, next) => {
         const { password, user_name, full_name, nickname } = req.body;
@@ -12,7 +12,7 @@ usersRouter
                 return res.status(400).json({ error: { message: `Missing ${field} in request body` } })
             }
         }
-        const passwordError = usersService.validatePassword(password)
+        const passwordError = UsersService.validatePassword(password)
         if (passwordError) {
             return res.status(400).json({ error: { message: passwordError } })
         }
@@ -25,7 +25,6 @@ usersRouter
                 if (takenUser) {
                     return res.status(400).json({ error: { message: 'Username taken' } })
                 }
-
                 return UsersService.hashPassword(password)
                     .then(hashedPassword => {
                         const newUser = {

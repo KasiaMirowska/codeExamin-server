@@ -13,10 +13,12 @@ const AuthService = {
     },
 
     createJwt(subject, payload) {
+        console.log(payload,config.JWT_SECRET,subject, 'kkkkkkkkk' )
         return jwt.sign(payload, config.JWT_SECRET, { subject, algorithm: 'HS256'})
     },
 
     verifyJwt(token) {
+        console.log(token, config.JWT_SECRET, {algorithms: ['HS256']}, 'HHHHBHHHHHH')
         return jwt.verify(token, config.JWT_SECRET, {algorithms: ['HS256'] }) 
     },
     
